@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('description')->nullable();
-            $table->boolean('completed')->default(0);
+            $table->boolean('is_complete')->default(0);
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
