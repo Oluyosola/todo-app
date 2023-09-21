@@ -38,7 +38,6 @@ class TodoController extends Controller
         $todos = QueryBuilder::for($this->todoService->index())
             ->allowedFilters([
                 'is_complete',
-                'is_active'
             ])
             ->paginate($request->per_page);
 
@@ -56,7 +55,8 @@ class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
-        $todo = $this->todoService->store($request);
+        $validated = $request->validated();
+        $todo = $this->todoService->store($validated);
 
         return ResponseBuilder::asSuccess()
             ->withHttpCode(\Illuminate\Http\Response::HTTP_CREATED)
@@ -73,12 +73,7 @@ class TodoController extends Controller
      */
     public function show($todoId)
     {
-        $todo = QueryBuilder::for($this->todoService->index()->where('id', $todoId))
-            ->allowedIncludes([
-                'artisan',
-                'category',
-            ])
-            ->firstOrFail();
+        $todo = $this->todoService->show($todoId);
         return ResponseBuilder::asSuccess()
             ->withData(['todo' => $todo])
             ->withMessage('Todo fetched successfully.')
@@ -92,45 +87,32 @@ class TodoController extends Controller
      * @param  Todo $todo
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function updateIsActive(Todo $todo)
-    {
-        $todo = $this->todoService->updateIsActive($todo);
-
-        return ResponseBuilder::asSuccess()
-            ->withHttpCode(\Illuminate\Http\Response::HTTP_OK)
-            ->withData(['todo' => $todo])
-            ->withMessage('Todo updated successfully.')
-            ->build();
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateTodoRequest $request
-     * @param  Todo $todo
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function updateIsComplete(Todo $todo)
-    {
-        $todo = $this->todoService->updateIsComplete($todo);
-
-        return ResponseBuilder::asSuccess()
-            ->withHttpCode(\Illuminate\Http\Response::HTTP_OK)
-            ->withData(['todo' => $todo])
-            ->withMessage('Todo updated successfully.')
-            ->build();
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateTodoRequest $request
-     * @param  Todo $todo
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        $todo = $this->todoService->update($request, $todo);
+        $validated = $request->validated();
+        $todo = $this->todoService->update($validated, $todo);
+
+        return ResponseBuilder::asSuccess()
+            ->withHttpCode(\Illuminate\Http\Response::HTTP_OK)
+            ->withData(['todo' => $todo])
+            ->withMessage('Todo updated successfully.')
+            ->build();
+    }
+
+    /**
+     * Update the specified resource status in storage.
+     *
+     * @param  UpdateTodoRequest $request
+     * @param  Todo $todo
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function updateIsComplete(Request $request, Todo $todo)
+    {
+        $validated = $request->validate([
+            'is_complete' => 'required|in:0,1'
+        ]);
+
+        $todo = $this->todoService->updateIsComplete($validated, $todo);
 
         return ResponseBuilder::asSuccess()
             ->withHttpCode(\Illuminate\Http\Response::HTTP_OK)
@@ -147,7 +129,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        $todo->delete();
+        $todo = $this->todoService->destroy($todo);
 
         return ResponseBuilder::asSuccess()
             ->withMessage('Todo deleted successfully.')
@@ -162,7 +144,7 @@ class TodoController extends Controller
      */
     public function restore(Todo $todo)
     {
-        $todo->restore();
+        $todo = $this->todoService->restore($todo);
 
         return ResponseBuilder::asSuccess()
             ->withMessage('Todo restored successfully.')
@@ -177,7 +159,7 @@ class TodoController extends Controller
      */
     public function forceDelete(Todo $todo)
     {
-        $todo->forceDelete();
+        $todo = $this->todoService->forceDelete($todo);
 
         return ResponseBuilder::asSuccess()
             ->withMessage('Todo permanently deleted successfully.')

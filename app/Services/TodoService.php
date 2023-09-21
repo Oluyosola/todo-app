@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Todo;
 
 
-
 class ToDoService
 {
   /**
@@ -35,44 +34,15 @@ class ToDoService
    */
   public function store($request)
   {
-    $todo = new Todo();
-    $todo->title = $request->title;
-    $todo->description = $request->description;
-    $todo->save();
 
-    return $todo;
+    $todo = Todo::create([
+      'title' => $request['title'],
+      'description' => $request['description'] ?? null,
+      'due_date' => $request['due_date'],
+    ]);
+
+    return $todo->refresh();
   }
-
-  /**
-   * Updates a todo.
-   *
-   * @param $request
-   * @param Todo $todo
-   * @return Todo $todo
-   */
-  public function updateIsActive(Todo $todo)
-  {
-    $todo->is_active = true;
-    $todo->save();
-
-    return $todo;
-  }
-
-  /**
-   * Updates a todo.
-   *
-   * @param $request
-   * @param Todo $todo
-   * @return Todo $todo
-   */
-  public function updateIsComplete(Todo $todo)
-  {
-    $todo->is_complete = true;
-    $todo->save();
-
-    return $todo;
-  }
-
 
   /**
    * Updates a todo.
@@ -83,13 +53,30 @@ class ToDoService
    */
   public function update($request, Todo $todo)
   {
-    $todo->title = $request->title;
-    $todo->description = $request->description;
+
+    $todo->title = $request['title'];
+    $todo->description = $request['description'] ?? null;
+    $todo->due_date = $request['due_date'];
     $todo->save();
 
     return $todo;
   }
 
+  /**
+   * Updates todo status.
+   *
+   * @param $request
+   * @param Todo $todo
+   * @return Todo $todo
+   */
+  public function updateIsComplete($request, Todo $todo)
+  {
+
+    $todo->is_complete = $request['is_complete'];
+    $todo->save();
+
+    return $todo;
+  }
 
   /**
    * Deletes a todo.
@@ -100,5 +87,27 @@ class ToDoService
   public function destroy(Todo $todo)
   {
     return $todo->delete();
+  }
+
+    /**
+   * Restores a todo.
+   *
+   * @param Todo $todo
+   * @return bool
+   */
+  public function restore(Todo $todo)
+  {
+    return $todo->restore();
+  }
+
+      /**
+   * Permanently delete a todo.
+   *
+   * @param Todo $todo
+   * @return bool
+   */
+  public function forceDelete(Todo $todo)
+  {
+    return $todo->forceDelete();
   }
 }

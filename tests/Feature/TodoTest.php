@@ -5,19 +5,22 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Todo;
+use Faker\Generator;
 use Tests\TestCase;
 
 
 class TodoTest extends TestCase
 {
-
+    public Generator $faker;
     /** @test */
 
     public function testCreateTodo()
     {
         $data = [
-            'title' => "Go to Church",
-            'description' => "This is time for church",
+            'title' => $this->faker->text,
+            'description' => $this->faker->text,
+            'due_date' => $this->faker->date,
+
         ];
         $response = $this->post(route('todo.create'), $data);
         $response->assertStatus(201);
@@ -28,6 +31,8 @@ class TodoTest extends TestCase
                 "todo" => [
                     "title" => $data['title'],
                     "description" =>  $data['description'],
+                    'due_date' => $data['due_date'],
+
                 ]
             ]
         ]);

@@ -12,6 +12,9 @@ class Todo extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'title', 'description'
+        'title', 
+        'description', 
+        'is_complete', 
+        'due_date'
     ];
 }

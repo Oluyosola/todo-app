@@ -29,7 +29,6 @@ Route::prefix('v1/todos')->group(function () {
         Route::delete('/', [TodoController::class, 'destroy']);
         Route::post('/restore', [TodoController::class, 'restore'])->withTrashed();
         Route::delete('/force-delete', [TodoController::class, 'forceDelete']);
-        Route::put('/is-active', [TodoController::class, 'isActive']);
-        Route::put('/is-complete', [TodoController::class, 'isComplete']);
+        Route::put('/is-complete', [TodoController::class, 'updateIsComplete']);
     });
 });
