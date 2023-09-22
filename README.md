@@ -68,4 +68,4 @@ With Laravel Sail, you have to run you artisan commands like this:
 sail artisan [command]
 ```
 
-For more info on Laravel Sail, you can check  out the official documentation on the [Laravel Docs website](https://laravel.com/docs)
+For more info on Laravel, you can check  out the official documentation on the [Laravel Docs website](https://laravel.com/docs)
