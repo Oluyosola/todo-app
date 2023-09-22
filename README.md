@@ -1,7 +1,7 @@
 # Todo App
 
-This App allows users manage and organise their day-to-day activities for better productivity
-This is the backend project this app.
+This App allows users manage and organise their day-to-day activities for better productivity.
+This is the backend project of this app.
 
 ## Installation
 
@@ -9,7 +9,6 @@ This is the backend project this app.
 
 - [PHP 8.1](https://www.php.net/downloads.php) or later
 - [Composer](https://getcomposer.org/)
-- [Node.js](https://nodejs.org/en/download/)
 - Any DB Admin Software of your choice like [MySQL Workbench](https://www.mysql.com/products/workbench/), [TablePlus](https://tableplus.com/download), [phpMyAdmin](https://www.phpmyadmin.net/), etc
 - [Docker](https://www.docker.com/products/docker-desktop/) (Optional)
 - Your prefered IDE
@@ -41,13 +40,21 @@ sail up -d
 
 5. Set up the database on your DB Admin software using the credentials in your `.env` file.
 
-7. Generate application key
+6. Generate application key
 
 ```sh
 sail artisan key:generate
 ```
 
-6. Open the project on your browser.
+7. Migrate the migration files.
+
+```sh
+sail artisan migrate
+```
+
+
+7. Open the project on your browser.
+
 
 ```sh
 http://127.0.0.1
