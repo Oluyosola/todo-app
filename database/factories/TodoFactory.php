@@ -19,6 +19,8 @@ class TodoFactory extends Factory
         return [
             'title' => $this->faker->text,
             'description' => $this->faker->text,
+            'due_date' => $this->faker->date,
+
 
         ];
     }

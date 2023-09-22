@@ -79,6 +79,15 @@ class ToDoService
   }
 
   /**
+   * Clear all Completed todos.
+   */
+
+  public function clearAllCompleted(){
+    $todo = Todo::where('is_complete', true)->delete();
+    return $todo;
+  }
+
+  /**
    * Deletes a todo.
    *
    * @param Todo $todo

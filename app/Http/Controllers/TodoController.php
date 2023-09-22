@@ -165,4 +165,14 @@ class TodoController extends Controller
             ->withMessage('Todo permanently deleted successfully.')
             ->build();
     }
+
+    public function clearAllCompleted()
+    {
+        $todo = $this->todoService->clearAllCompleted();
+
+        return ResponseBuilder::asSuccess()
+            ->withMessage('Completed Todos cleared.')
+            ->build();
+    }
+
 }

@@ -20,15 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Todos
-Route::prefix('v1/todos')->group(function () {
-    Route::get('/', [TodoController::class, 'index'])->name('todo.show');
-    Route::post('/', [TodoController::class, 'store'])->name('todo.create');
+
+Route::group(['prefix' => 'v1/todos', 'as' => 'todo.'], function () {
+    Route::get('/', [TodoController::class, 'index'])->name('show');
+    Route::post('/', [TodoController::class, 'store'])->name('create');
+    Route::delete('/clear-all-completed', [TodoController::class, 'clearAllCompleted'])->name('clear.all_completed');
     Route::prefix('/{todo}')->group(function () {
         Route::get('/', [TodoController::class, 'show']);
-        Route::put('/', [TodoController::class, 'update'])->name('todo.update');
+        Route::put('/', [TodoController::class, 'update'])->name('update');
         Route::delete('/', [TodoController::class, 'destroy']);
         Route::post('/restore', [TodoController::class, 'restore'])->withTrashed();
         Route::delete('/force-delete', [TodoController::class, 'forceDelete']);
-        Route::put('/is-complete', [TodoController::class, 'updateIsComplete']);
+        Route::put('/is-complete', [TodoController::class, 'updateIsComplete'])->name('update.is_complete');
+
     });
 });
