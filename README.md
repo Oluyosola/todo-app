@@ -53,7 +53,7 @@ sail artisan migrate
 ```
 
 
-7. Open the project on your browser.
+8. Open the project on your browser.
 
 
 ```sh
